@@ -34,6 +34,10 @@ void alterarLampada(bool estado);
 
 void setup()
 {
+
+  lcd.init();
+  lcd.backlight();
+
   configurarDebug();
   conectarWiFi();
   configurarMQTT();
@@ -135,6 +139,25 @@ void alterarLampada(bool estado)
     debugInfo("Desligando lampada");
     digitalWrite(PIN_LAMPADA, LOW);
   }
+}
+
+
+void configuracaoDisplay()
+{ // com movimento
+  if (movimento == HIGH)
+   {
+      lcd.clear()
+      lcd.setCursor(0,0);
+      lcd.print("Movimento detectado")
+
+   }
+   else
+   {
+      lcd.clear()
+      lcd.setCursor(0,0);
+      lcd.print("Sem movimento")
+   }
+
 }
 
 /*
