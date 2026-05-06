@@ -150,23 +150,27 @@ void alterarLampada(bool estado)
   }
 }
 
-
 void configuracaoDisplay()
 { // com movimento
   if (movimento == HIGH)
-   {
-      lcd.clear();
-      lcd.setCursor(0,0);
-      lcd.print("Movimento detectado");
+  {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print("Movimento detectado");
 
-   }
-   else
-   {
-      lcd.clear();
-      lcd.setCursor(0,0);
-      lcd.print("Sem movimento");
-   }
-
+    ledRGB.setPixelColor(0, ledRGB.Color(vermelho, verde, azul));
+    ledRGB.show();
+    debugInfo("Cor aplicada no LED RGB");
+    debugInfo("R: " + String(vermelho));
+    debugInfo("G: " + String(verde));
+    debugInfo("B: " + String(azul));
+  }
+  else
+  {
+    lcd.clear()
+        lcd.setCursor(0, 0);
+    lcd.print("Sem movimento")
+  }
 }
 
 /*
