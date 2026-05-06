@@ -12,11 +12,15 @@ const int QNTD_LEDS = 1;
 const char TOPICO_COMANDO[] = "esp32/comando";
 const int PIN_LAMPADA = 46;
 
+bool movimento = LOW;
+
 Adafruit_NeoPixel ledRGB(
     QNTD_LEDS,
     PIN_LED_RGB,
     NEO_GRB + NEO_KHZ800 // --> Igual a 82
 );
+
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 /*
 Nome:
@@ -146,16 +150,16 @@ void configuracaoDisplay()
 { // com movimento
   if (movimento == HIGH)
    {
-      lcd.clear()
+      lcd.clear();
       lcd.setCursor(0,0);
-      lcd.print("Movimento detectado")
+      lcd.print("Movimento detectado");
 
    }
    else
    {
-      lcd.clear()
+      lcd.clear();
       lcd.setCursor(0,0);
-      lcd.print("Sem movimento")
+      lcd.print("Sem movimento");
    }
 
 }
