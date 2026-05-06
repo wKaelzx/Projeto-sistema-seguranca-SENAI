@@ -48,6 +48,7 @@ void setup()
   registrarCallbackMensagem(tratarMensagemRecebida);
   conectarMQTT();
   pinMode(PIN_LAMPADA, OUTPUT);
+
 }
 
 void loop()
@@ -124,11 +125,15 @@ void tratarJsonComando(const String &mensagem)
     return;
   }
 
-  if (doc["lampada"].is<bool>())
+  if (doc["sensor_virtual"].is<bool>())
   {
     debugInfo("Processando lampada");
-    alterarLampada(doc["lampada"].as<bool>());
+    alterarLampada(doc["sensor_virtual"].as<bool>());
   }
+  
+
+
+
 }
 
 void alterarLampada(bool estado)
