@@ -12,11 +12,15 @@ const int QNTD_LEDS = 1;
 const char TOPICO_COMANDO[] = "esp32/comando";
 const int PIN_LAMPADA = 46;
 
+bool movimento = LOW;
+
 Adafruit_NeoPixel ledRGB(
     QNTD_LEDS,
     PIN_LED_RGB,
     NEO_GRB + NEO_KHZ800 // --> Igual a 82
 );
+
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 /*
 Nome:
@@ -149,6 +153,7 @@ void configuracaoDisplay()
       lcd.clear();
       lcd.setCursor(0,0);
       lcd.print("Movimento detectado");
+<<<<<<< HEAD
 
       ledRGB.setPixelColor(0, ledRGB.Color(vermelho, verde, azul));
   ledRGB.show();
@@ -156,13 +161,15 @@ void configuracaoDisplay()
   debugInfo("R: " + String(vermelho));
   debugInfo("G: " + String(verde));
   debugInfo("B: " + String(azul));
+=======
+>>>>>>> 87fd5ebefa4c65b3881a21d97cf771014b3e8fe6
 
    }
    else
    {
-      lcd.clear()
+      lcd.clear();
       lcd.setCursor(0,0);
-      lcd.print("Sem movimento")
+      lcd.print("Sem movimento");
    }
 
 }
