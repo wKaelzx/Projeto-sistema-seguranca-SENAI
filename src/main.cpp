@@ -7,7 +7,6 @@
 #include <LED.h>
 #include <LiquidCrystal_I2C.h>
 
-
 const int PIN_LED_RGB = 48;
 const int QNTD_LEDS = 1;
 const char TOPICO_COMANDO[] = "esp32/comando";
@@ -20,10 +19,10 @@ Adafruit_NeoPixel ledRGB(
 );
 
 /*
-Nome: 
-Data: 
-Programa: 
-Descrição: 
+Nome:
+Data:
+Programa:
+Descrição:
 Versão: 1.0
 */
 
@@ -31,8 +30,7 @@ void tratarMensagemRecebida(const char *topico, const String &mensagem);
 void configurarLedRGB();
 void alterarCorLedRGB(int red, int green, int blue);
 void tratarJsonComando(const String &mensagem);
-void ligarLampada();
-void desligarLampada();
+void alterarLampada(bool estado);
 
 void setup()
 {
@@ -121,28 +119,22 @@ void tratarJsonComando(const String &mensagem)
   if (doc["lampada"].is<bool>())
   {
     debugInfo("Processando lampada");
-    if (doc["lampada"].as<bool>())
-      ligarLampada();
-    else
-      desligarLampada();
+    alterarLampada(doc["lampada"].as<bool>());
   }
-
-  int vermelho = doc["led"]["r"].as<int>();
-  int verde = doc["led"]["g"].as<int>();
-  int azul = doc["led"]["b"].as<int>();
-  alterarCorLedRGB(vermelho, verde, azul);
 }
 
-void ligarLampada()
+void alterarLampada(bool estado)
 {
-  debugInfo("Ligando lampada");
-  digitalWrite(PIN_LAMPADA, HIGH);
-}
-
-void desligarLampada()
-{
-  debugInfo("Desligando lampada");
-  digitalWrite(PIN_LAMPADA, LOW);
+  if (estado)
+  {
+    debugInfo("Ligando lampada");
+    digitalWrite(PIN_LAMPADA, HIGH);
+  }
+  else
+  {
+    debugInfo("Desligando lampada");
+    digitalWrite(PIN_LAMPADA, LOW);
+  }
 }
 
 /*
