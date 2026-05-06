@@ -20,10 +20,10 @@ Adafruit_NeoPixel ledRGB(
 );
 
 /*
-Nome: Kael Fontes
-Data: 29/04
-Programa: MQTT
-Descrição: Demonstrar funcionamento do MQTT
+Nome: 
+Data: 
+Programa: 
+Descrição: 
 Versão: 1.0
 */
 
@@ -146,6 +146,7 @@ void desligarLampada()
 }
 
 /*
+ FORMATO JSON
 {
 "led": {
   "r": 255,
