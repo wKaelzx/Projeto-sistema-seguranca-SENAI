@@ -11,8 +11,10 @@ const int PIN_LED_RGB = 48;
 const int QNTD_LEDS = 1;
 const char TOPICO_COMANDO[] = "esp32/comando";
 const int PIN_LAMPADA = 46;
+const int PIN_BOTAO = 0;
+bool movimento = false;
 
-bool movimento = LOW;
+LED Lampada(PIN_LAMPADA);
 
 Adafruit_NeoPixel ledRGB(
     QNTD_LEDS,
@@ -35,6 +37,7 @@ void configurarLedRGB();
 void alterarCorLedRGB(int red, int green, int blue);
 void tratarJsonComando(const String &mensagem);
 void alterarLampada(bool estado);
+void chaveReset();
 
 void setup()
 {
@@ -56,6 +59,27 @@ void loop()
   garantirWiFiConectado();
   garantirMQTTConectado();
   MQTTLoop();
+  Lampada.update();
+  ledRGB.show();
+  static bool looped = false;
+ if (movimento && !looped)
+ {
+        debugInfo("Movimento recebido e processado");
+       	alterarCorLedRGB(0,255,0);
+	debugInfo("Acendendo lampada");
+	Lampada.acender();
+	looped = true;
+
+ }
+
+ // TODO
+ //
+ // if(botao.fall()){
+ //	debugInfo("Botao reset do sistema de seguranca foi pressionado");
+ //	debugInfo("Reiniciando sistema...");
+ //	movimento = false;
+ //	looped = false;
+ // }
 }
 
 void tratarMensagemRecebida(const char *topico, const String &mensagem)
@@ -114,26 +138,27 @@ void tratarJsonComando(const String &mensagem)
     debugErro("Erro ao deserializar JSON, código: " + String(erro.c_str()));
     return;
   }
-  if (!doc["led"].is<JsonObject>())
+  if (!doc["sensor_virtual"].is<JsonObject>())
   {
-    debugErro("JSON inválido, não contém chave para 'led' ");
+    debugErro("JSON inválido, não contém chave para 'sensor_virtual' ");
     return;
   }
-  if (!doc["led"]["r"].is<int>() || !doc["led"]["g"].is<int>() || !doc["led"]["b"].is<int>())
+  if (!doc["sensor_virtual"].is<bool>()
   {
-    debugErro("JSON Inválido, não foi possível encontrar chave para 'r' ou 'g' ou 'b' ");
-    return;
+  // 0 - vigiando
+  // 1 - detectado
+  	if(doc["led"].as<bool>)
+	{
+		debugInfo("Movimento recebido e processado")
+		movimento = true;
+	}
   }
-
-  if (doc["sensor_virtual"].is<bool>())
+  else
   {
-    debugInfo("Processando lampada");
-    alterarLampada(doc["sensor_virtual"].as<bool>());
+  	debugErro("Tipo improprio para chave JSON: sensor_virtual")
+	return;
   }
   
-
-
-
 }
 
 void alterarLampada(bool estado)
@@ -150,36 +175,25 @@ void alterarLampada(bool estado)
   }
 }
 
-void configuracaoDisplay()
+void loopDisplay()
 { // com movimento
-  if (movimento == HIGH)
+  if (movimento)
   {
     lcd.clear();
     lcd.setCursor(0, 0);
     lcd.print("Movimento detectado");
-
-    ledRGB.setPixelColor(0, ledRGB.Color(vermelho, verde, azul));
-    ledRGB.show();
-    debugInfo("Cor aplicada no LED RGB");
-    debugInfo("R: " + String(vermelho));
-    debugInfo("G: " + String(verde));
-    debugInfo("B: " + String(azul));
   }
   else
   {
     lcd.clear()
-        lcd.setCursor(0, 0);
-    lcd.print("Sem movimento")
+    lcd.setCursor(0, 0);
+    lcd.print("Sem movimento");
   }
 }
 
+void chaveReset(){
+// TODO  Funcao para a senha e botao, precisamos importar a biblioteca bounce
+}
 /*
  FORMATO JSON
-{
-"led": {
-  "r": 255,
-  "g": 0,
-  "b":
-  }
-}
 */
