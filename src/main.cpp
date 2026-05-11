@@ -31,14 +31,20 @@ void loop()
   garantirWiFiConectado();
   garantirMQTTConectado();
   MQTTLoop();
+
   bool mov = haMovimento();
-  static bool pastMov = mov;
-  if (mov != pastMov)
+  static bool movAntigo = false;
+
+  // Só envia se o estado MUDOU para "tem movimento"
+  if (mov == true && movAntigo == false)
   {
-    processarJson(mov);
+    debugInfo("Movimento detectado! Enviando para a Central...");
+    processarJson(true);
+    delay(2000); // "Trava" por 2 segundos para não mandar 500 mensagens seguidas
   }
-  pastMov = mov;
-  delay(500);
+  
+  movAntigo = mov;
+  delay(100); // Leitura mais rápida, mas envio controlado
 }
 
 /*
